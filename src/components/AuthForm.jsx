@@ -4,8 +4,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import bg from "../assets/mobilebg.jpg";
+import "ldrs/ring";
 
 function AuthForm({ host }) {
+  const [loading, setLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -30,6 +32,7 @@ function AuthForm({ host }) {
 
   const submitForm = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const url = `${host}/api/auth/${isLogin ? "login" : "register"}`;
 
     try {
@@ -67,7 +70,7 @@ function AuthForm({ host }) {
         backgroundPosition: "center",
       }}
     >
-      <div className="w-full max-w-md p-8 bg-tranparent bg-opacity-90 rounded-lg shadow-lg mb-10">
+      <div className="w-full max-w-md p-8 bg-tranparent bg-opacity-100 rounded-lg shadow-[0_8px_20px_10px_rgba(0,0,0,0.25)] mb-10">
         <h3 className="text-2xl font-bold text-center text-gray-200 mb-6">
           {isLogin ? "Login" : "Register"}
         </h3>
@@ -128,7 +131,20 @@ function AuthForm({ host }) {
             type="submit"
             className="w-full px-6 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 transition duration-300"
           >
-            {isLogin ? "Login" : "Register"}
+            <button
+              type="submit"
+              className="w-full px-6 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 transition duration-300"
+            >
+              {loading ? (
+                <div className="flex justify-center">
+                  <span className="animate-spin w-6 h-6 border-4 border-white border-t-transparent rounded-full"></span>
+                </div>
+              ) : isLogin ? (
+                "Login"
+              ) : (
+                "Register"
+              )}
+            </button>
           </button>
           <p className="mt-5 text-center font-bold text-sm text-gray-200">
             {isLogin ? "New User? " : "Already have an account? "}

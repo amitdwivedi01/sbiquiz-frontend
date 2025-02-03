@@ -18,6 +18,19 @@ function HomePage({ host }) {
   }, [navigate]);
 
   useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        window.location.reload();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
+  useEffect(() => {
     fetchRounds();
 
     // Listen for real-time events from the admin panel
@@ -72,7 +85,6 @@ function HomePage({ host }) {
           ...round,
           questions: round.questions.map((question) => ({
             ...question,
-            isActive: false,
           })),
         }))
       );
@@ -95,7 +107,7 @@ function HomePage({ host }) {
         {rounds.map((round) => (
           <div
             key={round._id}
-            className="bg-transparent bg-opacity-99 rounded-lg shadow-xl mb-4 p-6 transition transform hover:-translate-y-1"
+            className="bg-transparent bg-opacity-99 rounded-lg shadow-[0_4px_20px_10px_rgba(0,0,0,0.25)] mb-4 p-6 transition transform hover:-translate-y-1"
           >
             <div className="flex items-center justify-between mb-4">
               <span className="bg-indigo-600 text-white px-4 py-2 rounded-full text-xl font-semibold">

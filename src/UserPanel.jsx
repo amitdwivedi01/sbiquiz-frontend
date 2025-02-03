@@ -24,6 +24,7 @@ const UserPanel = ({ host }) => {
 
     socket.on("questionActivated", ({ question, timeLimit }) => {
       setQuestion(question);
+      console.log(question);
       // We are no longer displaying the time left
     });
 
@@ -44,6 +45,7 @@ const UserPanel = ({ host }) => {
       .get(`${host}/api/response/active-question`)
       .then((response) => {
         setQuestion(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         toast.error("Could not load active question.");
@@ -100,8 +102,8 @@ const UserPanel = ({ host }) => {
     >
       <div className="w-full max-w-lg mt-15">
         {question ? (
-          <div className="bg-tranparent bg-opacity-80 backdrop-filter backdrop-blur-lg p-8 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-semibold text-gray-200 mb-6">
+          <div className="bg-gradient-to-r from-[#d12056] to-[#532c6d]   p-8 rounded-lg shadow-[0_8px_20px_10px_rgba(0,0,0,0.25)]">
+            <h2 className="text-2xl font-semibold text-white mb-6">
               {question.questionText}
             </h2>
             <div className="grid grid-cols-2 gap-4">
