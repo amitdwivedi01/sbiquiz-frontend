@@ -1,26 +1,23 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import bg from "../assets/mobilebg.jpg";
-import "ldrs/ring";
+import bg from "../assets/mobile.jpg";
+import toast from "react-hot-toast";
 
 function AuthForm({ host }) {
   const [loading, setLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
-    phone: "",
+    employeeId: "",
     department: "",
   });
   const navigate = useNavigate();
 
   useEffect(() => {
     // Check if user email is already stored and redirect
-    const userEmail = localStorage.getItem("SbiuserEmail");
-    if (userEmail) {
+    const userEmpId = localStorage.getItem("SbiuserEmpId");
+    if (userEmpId) {
       navigate("/home");
     }
   }, [navigate]);
@@ -38,7 +35,7 @@ function AuthForm({ host }) {
     try {
       const response = await axios.post(url, formData);
       if (response.status === 201 || response.status === 200) {
-        localStorage.setItem("SbiuserEmail", response.data.user.email);
+        localStorage.setItem("SbiuserEmpId", response.data.user.employeeId);
         localStorage.setItem("SbiuserName", response.data.user.name);
         toast.success(`Successfully ${isLogin ? "logged in" : "registered"}.`);
         navigate("/home");
@@ -52,13 +49,15 @@ function AuthForm({ host }) {
     } catch (error) {
       console.error("Error:", error.response.data);
       toast.error(`Error: ${error.response.data}`);
+    } finally {
+      setLoading(false);
     }
   };
 
   const toggleForm = () => {
     setIsLogin(!isLogin);
     // Reset all form fields when toggling between forms
-    setFormData({ name: "", email: "", phone: "", department: "" });
+    setFormData({ name: "", employeeId: "", department: "" });
   };
 
   return (
@@ -76,76 +75,61 @@ function AuthForm({ host }) {
         </h3>
         <form onSubmit={submitForm}>
           {!isLogin && (
-            <>
-              <div className="mb-4">
-                <input
-                  type="text"
-                  placeholder="Enter Your Name"
-                  id="name"
-                  name="name"
-                  onChange={handleChange}
-                  value={formData.name}
-                  className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-500 bg-white bg-opacity-80"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <input
-                  type="text"
-                  placeholder="Enter Your Employee Code"
-                  id="phone"
-                  name="phone"
-                  onChange={handleChange}
-                  value={formData.phone}
-                  className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-500 bg-white bg-opacity-80"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <input
-                  type="text"
-                  placeholder="Enter Your Department"
-                  id="department"
-                  name="department"
-                  onChange={handleChange}
-                  value={formData.department}
-                  className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-500 bg-white bg-opacity-80"
-                  required
-                />
-              </div>
-            </>
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Enter Your Name"
+                id="name"
+                name="name"
+                onChange={handleChange}
+                value={formData.name}
+                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-500 bg-white bg-opacity-80"
+                required
+              />
+            </div>
           )}
-          <div className="mb-6">
+          <div className="mb-4">
             <input
-              type="email"
-              placeholder="Enter Your Email"
-              id="email"
-              name="email"
+              type="text"
+              placeholder="Enter Your Employee code"
+              id="employeeId"
+              name="employeeId"
               onChange={handleChange}
-              value={formData.email}
+              value={formData.employeeId}
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-500 bg-white bg-opacity-80"
               required
             />
           </div>
+          {!isLogin && (
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Enter Your Department"
+                id="department"
+                name="department"
+                onChange={handleChange}
+                value={formData.department}
+                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-500 bg-white bg-opacity-80"
+                required
+              />
+            </div>
+          )}
+
           <button
             type="submit"
-            className="w-full px-6 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 transition duration-300"
+            className="w-full mt-2 px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-800 focus:outline-none  "
           >
-            <button
-              type="submit"
-              className="w-full px-6 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 transition duration-300"
-            >
-              {loading ? (
-                <div className="flex justify-center">
-                  <span className="animate-spin w-6 h-6 border-4 border-white border-t-transparent rounded-full"></span>
-                </div>
-              ) : isLogin ? (
-                "Login"
-              ) : (
-                "Register"
-              )}
-            </button>
+            {loading ? (
+              <div className="flex justify-center">
+                <span className="animate-spin w-6 h-6 border-4 border-white border-t-transparent rounded-full"></span>
+              </div>
+            ) : isLogin ? (
+              "Login"
+            ) : (
+              "Register"
+            )}
           </button>
+
           <p className="mt-5 text-center font-bold text-sm text-gray-200">
             {isLogin ? "New User? " : "Already have an account? "}
             <button
@@ -158,17 +142,6 @@ function AuthForm({ host }) {
           </p>
         </form>
       </div>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </div>
   );
 }

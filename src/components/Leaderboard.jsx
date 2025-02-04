@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 import { useParams, useLocation } from "react-router-dom";
-import bg from "../assets/desktopbg.jpg";
+import bg from "../assets/desktop.jpg";
 
 // Create a single socket connection instance
 
@@ -69,21 +69,15 @@ const Leaderboard = ({ host }) => {
               return (
                 <div
                   key={index}
-                  className="flex items-center justify-between p-4 my-2 bg-gray-800 bg-opacity-70 rounded-lg shadow hover:shadow-xl transition duration-300"
+                  className="grid grid-cols-3 items-center  p-4 my-2 bg-gray-800 bg-opacity-70 rounded-lg shadow hover:shadow-xl transition duration-300"
                 >
-                  <div className="flex items-center">
-                    <span className="text-xl font-bold mr-2">
-                      {overallRank}.
-                    </span>
+                  <div className="flex items-center col-span-2">
                     {overallRank === 1 && (
                       <span className="text-2xl mr-2 pb-2">👑</span>
                     )}
                     <span className="text-lg">{entry.name}</span>
                   </div>
-                  <div className="text-lg">{entry._id}</div>
-                  <div className="text-lg font-semibold">
-                    Score: {entry.totalPoints}
-                  </div>
+                  <div className="text-lg text-left">{entry._id}</div>
                 </div>
               );
             })}
@@ -95,21 +89,15 @@ const Leaderboard = ({ host }) => {
               return (
                 <div
                   key={index + 15} // ensure unique keys
-                  className="flex items-center justify-between p-4 my-2 bg-gray-800 bg-opacity-70 rounded-lg shadow hover:shadow-xl transition duration-300"
+                  className="grid grid-cols-3 items-center p-4 my-2 bg-gray-800 bg-opacity-70 rounded-lg shadow hover:shadow-xl transition duration-300"
                 >
-                  <div className="flex items-center">
-                    <span className="text-xl font-bold mr-2">
-                      {overallRank}.
-                    </span>
+                  <div className="flex items-center col-span-2">
                     {overallRank === 1 && (
                       <span className="text-2xl mr-2">👑</span>
                     )}
                     <span className="text-lg">{entry.name}</span>
                   </div>
-                  <div className="text-lg">{entry._id}</div>
-                  <div className="text-lg font-semibold">
-                    Score: {entry.totalPoints}
-                  </div>
+                  <div className="text-lg text-left">{entry.phone}</div>
                 </div>
               );
             })}

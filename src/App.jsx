@@ -3,16 +3,17 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AdminPanel from "./AdminPanel";
 import UserPanel from "./UserPanel";
 import AuthForm from "./components/AuthForm";
-import { ToastContainer, toast } from "react-toastify";
 import HomePage from "./components/HomePage";
 import Leaderboard from "./components/Leaderboard";
 import logo from "./assets/sbi logo.png";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
   const host = "https://sbiquiz.onrender.com";
+  // const host = "http://localhost:4000";
   return (
     <Router>
-      <ToastContainer />
+      <Toaster />
       <div>
         <div className="bg-white h-[7vh]">
           <img src={logo} className=" h-full p-3 float-right" alt="" />
